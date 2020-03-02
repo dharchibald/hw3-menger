@@ -146,6 +146,23 @@ MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	g_current_button = button;
 }
 
+void
+generate_floor (std::vector<glm::vec4>& floor_vertices,
+				std::vector<glm::vec4>& floor_normals,
+				std::vector<glm::uvec3>& floor_faces) 
+{
+	floor_vertices.push_back(glm::vec4(-10, -1, -10, 1));
+	floor_vertices.push_back(glm::vec4(-10, -1,  10, 1));
+	floor_vertices.push_back(glm::vec4( 10, -1,  10, 1));
+	floor_vertices.push_back(glm::vec4( 10, -1, -10, 1));
+
+	floor_normals.push_back(glm::vec4(0, 1, 0, 0));
+	floor_normals.push_back(glm::vec4(0, 1, 0, 0));
+
+	floor_faces.push_back(glm::uvec3(0, 1, 2));
+	floor_faces.push_back(glm::uvec3(1, 2, 3));
+}
+
 int main(int argc, char* argv[])
 {
 	std::string window_title = "Menger";
@@ -179,10 +196,19 @@ int main(int argc, char* argv[])
 	std::vector<glm::vec4> obj_vertices;
 	std::vector<glm::vec4> vtx_normals;
 	std::vector<glm::uvec3> obj_faces;
+
+	/* START USER CONTENT */
+	std::vector<glm::vec4> floor_vertices;
+	std::vector<glm::vec4> floor_normals;
+	std::vector<glm::uvec3> floor_faces;
+	/* END USER CONTENT */
         
         //FIXME: Create the geometry from a Menger object (in menger.cc).
 	g_menger->set_nesting_level(1);
 	g_menger->generate_geometry(obj_vertices, vtx_normals, obj_faces);
+	// USER CONTENT
+	generate_floor(floor_vertices, floor_normals, floor_faces);
+
 	g_menger->set_clean();
 
 	glm::vec4 min_bounds = glm::vec4(std::numeric_limits<float>::max());
@@ -233,6 +259,39 @@ int main(int argc, char* argv[])
 
 	// FIXME: load the floor into g_buffer_objects[kFloorVao][*],
 	//        and bind the VBO to g_array_objects[kFloorVao]
+	
+	/* START USER CONTENT */
+	// Switch to the VAO for Floor.
+	CHECK_GL_ERROR(glBindVertexArray(g_array_objects[kFloorVao]));
+
+	// Generate buffer objects for Floor.
+	CHECK_GL_ERROR(glGenBuffers(kNumVbos, &g_buffer_objects[kFloorVao][0]));
+
+	// Setup vertex data in VBO.
+	CHECK_GL_ERROR(glBindBuffer(GL_ARRAY_BUFFER, g_buffer_objects[kFloorVao][kVertexBuffer]));
+	CHECK_GL_ERROR(glBufferData(GL_ARRAY_BUFFER,
+								sizeof(float) * floor_vertices.size() * 4, 
+								nullptr,
+								GL_STATIC_DRAW));
+	CHECK_GL_ERROR(glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0));
+	CHECK_GL_ERROR(glEnableVertexAttribArray(0));
+
+	// Setup normal data in VBO.
+	CHECK_GL_ERROR(glBindBuffer(GL_ARRAY_BUFFER, g_buffer_objects[kFloorVao][kNormalBuffer]));
+	CHECK_GL_ERROR(glBufferData(GL_ARRAY_BUFFER,
+								sizeof(float) * floor_normals.size() * 4, 
+								nullptr,
+								GL_STATIC_DRAW));
+	CHECK_GL_ERROR(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0));
+	CHECK_GL_ERROR(glEnableVertexAttribArray(1));
+
+	// Setup face data in VBO.
+	CHECK_GL_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_buffer_objects[kFloorVao][kIndexBuffer]));
+	CHECK_GL_ERROR(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+				sizeof(uint32_t) * floor_faces.size() * 3,
+				&floor_faces[0], 
+				GL_STATIC_DRAW));
+	/* END USER CONTENT */
 
 	// Setup vertex shader.
 	GLuint vertex_shader_id = 0;
