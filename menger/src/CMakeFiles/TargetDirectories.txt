@@ -1,0 +1,6 @@
+/home/doug/Storage/CS354/hw3-menger/menger/src/CMakeFiles/rebuild_cache.dir
+/home/doug/Storage/CS354/hw3-menger/menger/src/CMakeFiles/utgraphicsutil.dir
+/home/doug/Storage/CS354/hw3-menger/menger/src/CMakeFiles/edit_cache.dir
+/home/doug/Storage/CS354/hw3-menger/menger/src/src/CMakeFiles/rebuild_cache.dir
+/home/doug/Storage/CS354/hw3-menger/menger/src/src/CMakeFiles/menger.dir
+/home/doug/Storage/CS354/hw3-menger/menger/src/src/CMakeFiles/edit_cache.dir

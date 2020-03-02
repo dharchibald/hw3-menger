@@ -1,0 +1,3 @@
+/home/doug/Storage/CS354/hw3-menger/menger/src/build/CMakeFiles/rebuild_cache.dir
+/home/doug/Storage/CS354/hw3-menger/menger/src/build/CMakeFiles/menger.dir
+/home/doug/Storage/CS354/hw3-menger/menger/src/build/CMakeFiles/edit_cache.dir
