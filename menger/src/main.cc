@@ -115,10 +115,15 @@ KeyCallback(GLFWwindow* window,
 	if (key == GLFW_KEY_0 && action != GLFW_RELEASE) {
 		// FIXME: Change nesting level of g_menger
 		// Note: GLFW_KEY_0 - 4 may not be continuous.
+		g_menger->set_nesting_level(0);
 	} else if (key == GLFW_KEY_1 && action != GLFW_RELEASE) {
+		g_menger->set_nesting_level(1);
 	} else if (key == GLFW_KEY_2 && action != GLFW_RELEASE) {
+		g_menger->set_nesting_level(2);
 	} else if (key == GLFW_KEY_3 && action != GLFW_RELEASE) {
+		g_menger->set_nesting_level(3);
 	} else if (key == GLFW_KEY_4 && action != GLFW_RELEASE) {
+		g_menger->set_nesting_level(4);
 	}
 }
 
