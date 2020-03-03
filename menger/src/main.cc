@@ -151,6 +151,14 @@ generate_floor (std::vector<glm::vec4>& floor_vertices,
 				std::vector<glm::vec4>& floor_normals,
 				std::vector<glm::uvec3>& floor_faces) 
 {
+	floor_vertices.push_back(glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f));
+	floor_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	floor_vertices.push_back(glm::vec4(0.5f, -0.5f, -0.5f, 1.0f));
+	floor_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	floor_vertices.push_back(glm::vec4(0.0f, 0.5f, -0.5f, 1.0f));
+	floor_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	floor_faces.push_back(glm::uvec3(0, 1, 2));
+	/*
 	floor_vertices.push_back(glm::vec4(-10, -1, -10, 1));
 	floor_vertices.push_back(glm::vec4(-10, -1,  10, 1));
 	floor_vertices.push_back(glm::vec4( 10, -1,  10, 1));
@@ -161,6 +169,7 @@ generate_floor (std::vector<glm::vec4>& floor_vertices,
 
 	floor_faces.push_back(glm::uvec3(0, 1, 2));
 	floor_faces.push_back(glm::uvec3(1, 2, 3));
+	*/
 }
 
 int main(int argc, char* argv[])
@@ -293,6 +302,8 @@ int main(int argc, char* argv[])
 				GL_STATIC_DRAW));
 	/* END USER CONTENT */
 
+
+
 	// Setup vertex shader.
 	GLuint vertex_shader_id = 0;
 	const char* vertex_source_pointer = vertex_shader;
@@ -345,6 +356,8 @@ int main(int argc, char* argv[])
 	CHECK_GL_ERROR(light_position_location =
 			glGetUniformLocation(program_id, "light_position"));
 
+
+
 	// Setup fragment shader for the floor
 	GLuint floor_fragment_shader_id = 0;
 	const char* floor_fragment_source_pointer = floor_fragment_shader;
@@ -356,10 +369,43 @@ int main(int argc, char* argv[])
 
 	// FIXME: Setup another program for the floor, and get its locations.
 	// Note: you can reuse the vertex and geometry shader objects
+
+	/* START USER CONTENT */
 	GLuint floor_program_id = 0;
+	CHECK_GL_ERROR(floor_program_id = glCreateProgram());
+	CHECK_GL_ERROR(glAttachShader(floor_program_id, vertex_shader_id));
+	CHECK_GL_ERROR(glAttachShader(floor_program_id, floor_fragment_shader_id));
+
+	CHECK_GL_ERROR(glBindBuffer(GL_ARRAY_BUFFER, g_buffer_objects[kFloorVao][kVertexBuffer]));
+	CHECK_GL_ERROR(glBufferData(GL_ARRAY_BUFFER,
+				sizeof(float) * floor_vertices.size() * 4, 
+				nullptr,
+				GL_STATIC_DRAW));
+
+	CHECK_GL_ERROR(glBindBuffer(GL_ARRAY_BUFFER, g_buffer_objects[kFloorVao][kNormalBuffer]));
+	CHECK_GL_ERROR(glBufferData(GL_ARRAY_BUFFER,
+				sizeof(float) * floor_normals.size() * 4, 
+				nullptr,
+				GL_STATIC_DRAW));
+
+	// Bind attributes.
+	CHECK_GL_ERROR(glBindAttribLocation(floor_program_id, 0, "vertex_position"));
+	CHECK_GL_ERROR(glBindAttribLocation(floor_program_id, 1, "vertex_normal"));
+	CHECK_GL_ERROR(glBindFragDataLocation(program_id, 0, "fragment_color"));
+	glLinkProgram(floor_program_id);
+	CHECK_GL_PROGRAM_ERROR(floor_program_id);
+
+	// Get the uniform locations.
 	GLint floor_projection_matrix_location = 0;
+	CHECK_GL_ERROR(floor_projection_matrix_location =
+		glGetUniformLocation(floor_program_id, "projection"));
 	GLint floor_view_matrix_location = 0;
+	CHECK_GL_ERROR(floor_view_matrix_location =
+		glGetUniformLocation(floor_program_id, "view"));
 	GLint floor_light_position_location = 0;
+	CHECK_GL_ERROR(floor_light_position_location =
+		glGetUniformLocation(floor_program_id, "light_position"));
+	/* END USER CONTENT */
 
 	glm::vec4 light_position = glm::vec4(10.0f, 10.0f, 10.0f, 1.0f);
 	float aspect = 0.0f;
@@ -421,6 +467,36 @@ int main(int argc, char* argv[])
 		// 	3. Pass Uniforms
 		// 	4. Call glDrawElements, since input geometry is
 		// 	indicated by VAO.
+
+		/* START USER CONTENT */
+		// Swap to floor vertices and send to GPU.
+		CHECK_GL_ERROR(glBindVertexArray(g_array_objects[kFloorVao]));
+		CHECK_GL_ERROR(glBindBuffer(GL_ARRAY_BUFFER,
+									g_buffer_objects[kFloorVao][kVertexBuffer]));
+		CHECK_GL_ERROR(glBufferData(GL_ARRAY_BUFFER,
+									sizeof(float) * floor_vertices.size() * 4,
+									&floor_vertices[0],
+									GL_STATIC_DRAW));
+		CHECK_GL_ERROR(glBindBuffer(GL_ARRAY_BUFFER,
+									g_buffer_objects[kFloorVao][kNormalBuffer]));
+		CHECK_GL_ERROR(glBufferData(GL_ARRAY_BUFFER,
+									sizeof(float) * floor_normals.size() * 4,
+									&floor_normals[0],
+									GL_STATIC_DRAW));
+
+		// Use floor program.
+		CHECK_GL_ERROR(glUseProgram(floor_program_id));
+
+		// Pass uniforms in.
+		CHECK_GL_ERROR(glUniformMatrix4fv(floor_projection_matrix_location, 1, GL_FALSE,
+					&projection_matrix[0][0]));
+		CHECK_GL_ERROR(glUniformMatrix4fv(floor_view_matrix_location, 1, GL_FALSE,
+					&view_matrix[0][0]));
+		CHECK_GL_ERROR(glUniform4fv(floor_light_position_location, 1, &light_position[0]));
+
+		// Draw our triangles.
+		CHECK_GL_ERROR(glDrawElements(GL_TRIANGLES, floor_faces.size() * 3, GL_UNSIGNED_INT, 0));
+		/* END USER CONTENT */
 
 		// Poll and swap.
 		glfwPollEvents();
