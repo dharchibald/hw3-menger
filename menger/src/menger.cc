@@ -5,6 +5,9 @@ namespace {
 	const int kMaxLevel = 4;
 };
 
+const glm::vec3 min_bounds(-0.5, -0.5, -0.5);
+const glm::vec3 max_bounds( 0.5,  0.5,  0.5);
+
 Menger::Menger()
 {
 	// Add additional initialization if you like
@@ -39,7 +42,20 @@ Menger::generate_geometry(std::vector<glm::vec4>& obj_vertices,
 			  std::vector<glm::vec4>& vtx_normals,
                           std::vector<glm::uvec3>& obj_faces) const
 {
-	return;
+	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, -5.0f, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, -5.0f, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, -5.0f, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, -5.0f, 1.0f));
+
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+
+	obj_faces.push_back(glm::uvec3(0, 1, 2));
+	obj_faces.push_back(glm::uvec3(1, 2, 3));
+
+	/*
 	obj_vertices.push_back(glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f));
 	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
 	obj_vertices.push_back(glm::vec4(0.5f, -0.5f, -0.5f, 1.0f));
@@ -47,5 +63,6 @@ Menger::generate_geometry(std::vector<glm::vec4>& obj_vertices,
 	obj_vertices.push_back(glm::vec4(0.0f, 0.5f, -0.5f, 1.0f));
 	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
 	obj_faces.push_back(glm::uvec3(0, 1, 2));
+	*/
 }
 
