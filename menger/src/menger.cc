@@ -45,55 +45,113 @@ Menger::generate_geometry(std::vector<glm::vec4>& obj_vertices,
 {
 	// Can't avoid duplicate vertices for shared geometry?
 	// Construct vertices in terms of triangles needed
+	// Triangle 0,1,2 - backface
 	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
-	vtx_normals.push_back(glm::vec4(-third, -third, third, 0.0f));
-
 	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
-	vtx_normals.push_back(glm::vec4(third, -third, third, 0.0f));
-
 	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance + min_bounds.z, 1.0f));
-	vtx_normals.push_back(glm::vec4(-third, third, third, 0.0f));
-
-	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance + min_bounds.z, 1.0f));
-	vtx_normals.push_back(glm::vec4(third, third, third, 0.0f));
-
-	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
-	vtx_normals.push_back(glm::vec4(-third, -third, -third, 0.0f));
-
-	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
-	vtx_normals.push_back(glm::vec4(third, -third, -third, 0.0f));
-
-	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
-	vtx_normals.push_back(glm::vec4(-third, third, -third, 0.0f));
-
-	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
-	vtx_normals.push_back(glm::vec4(third, third, -third, 0.0f));
-
-
-	/* Back face */
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
 	obj_faces.push_back(glm::uvec3(0, 1, 2));
-	obj_faces.push_back(glm::uvec3(1, 2, 3));
 
-	/* Front face */
-	obj_faces.push_back(glm::uvec3(4, 5, 6));
-	obj_faces.push_back(glm::uvec3(5, 6, 7));
+	// Triangle 1,2,3 - backface
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance + min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance + min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(3, 4, 5));
 
-	/* Right face */
-	obj_faces.push_back(glm::uvec3(5, 1, 7));
-	obj_faces.push_back(glm::uvec3(1, 7, 3));
+	// Triangle 4,5,6 - frontface
+	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(6, 7, 8));
 
-	/* Left face */
-	obj_faces.push_back(glm::uvec3(4, 0, 6));
-	obj_faces.push_back(glm::uvec3(0, 6, 2));
+	// Triangle 5,6,7 - frontface
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(9, 10, 11));
 
-	/* Top face */
-	obj_faces.push_back(glm::uvec3(6, 7, 2));
-	obj_faces.push_back(glm::uvec3(7, 2, 3));
+	// Triangle 5,1,7 - rightface
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(12, 13, 14));
 
-	/* Bottom face */
-	obj_faces.push_back(glm::uvec3(4, 5, 0));
-	obj_faces.push_back(glm::uvec3(5, 0, 1));
+	// Triangle 1,7,3 - rightface
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance + min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(15, 16, 17));
 
+	// Triangle 4,0,6 - leftface
+	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(-1.0f, 0.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(-1.0f, 0.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(-1.0f, 0.0f, 0.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(18, 19, 20));
+
+	// Triangle 0,6,2 - leftface
+	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance + min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(-1.0f, 0.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(-1.0f, 0.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(-1.0f, 0.0f, 0.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(21, 22, 23));
+
+	// Triangle 6,7,2 - topface
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance + min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(24, 25, 26));
+
+	// Triangle 7,2,3 - topface
+	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, max_bounds.y, distance + min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, max_bounds.y, distance + min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(27, 28, 29));
+
+	// Triangle 4,5,0 - bottomface
+	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, -1.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, -1.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, -1.0f, 0.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(30, 31, 32));
+
+	// Triangle 5,0,1 - bottomface
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance - min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(min_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
+	obj_vertices.push_back(glm::vec4(max_bounds.x, min_bounds.y, distance + min_bounds.z, 1.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, -1.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, -1.0f, 0.0f, 0.0f));
+	vtx_normals.push_back(glm::vec4(0.0f, -1.0f, 0.0f, 0.0f));
+	obj_faces.push_back(glm::uvec3(33, 34, 35));
 
 	/*
 	obj_vertices.push_back(glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f));
