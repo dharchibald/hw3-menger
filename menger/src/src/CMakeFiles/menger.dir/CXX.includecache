@@ -11,6 +11,8 @@
 /home/doug/Storage/CS354/hw3-menger/menger/src/camera.cc
 camera.h
 /home/doug/Storage/CS354/hw3-menger/menger/src/camera.h
+stdio.h
+-
 
 /home/doug/Storage/CS354/hw3-menger/menger/src/camera.h
 glm/glm.hpp

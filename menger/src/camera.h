@@ -13,6 +13,7 @@ private:
 	glm::vec3 up_ = glm::vec3(0.0f, 1.0, 0.0f);
 	glm::vec3 eye_ = glm::vec3(0.0f, 0.0f, camera_distance_);
 	// Note: you may need additional member variables
+	glm::vec3 at_ = glm::vec3(0.0f, 0.0f, 0.0f);
 };
 
 #endif
