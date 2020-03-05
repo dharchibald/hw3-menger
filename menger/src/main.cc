@@ -129,19 +129,28 @@ KeyCallback(GLFWwindow* window,
 
 int g_current_button;
 bool g_mouse_pressed;
+glm::dvec2 prev_mouse = glm::dvec2(0.0, 0.0);
 
 void
 MousePosCallback(GLFWwindow* window, double mouse_x, double mouse_y)
 {
+	double angleX = (mouse_x - prev_mouse.x);
+	double angleY = (mouse_y - prev_mouse.y);
 	if (!g_mouse_pressed)
 		return;
 	if (g_current_button == GLFW_MOUSE_BUTTON_LEFT) {
 		// FIXME: left drag
+		// printf("Mouse: (%f, %f)\n", mouse_x, mouse_y);
+		g_camera.rotateX(-angleX);
+		g_camera.rotateY(-angleY);
+		
 	} else if (g_current_button == GLFW_MOUSE_BUTTON_RIGHT) {
 		// FIXME: middle drag
 	} else if (g_current_button == GLFW_MOUSE_BUTTON_MIDDLE) {
 		// FIXME: right drag
 	}
+	prev_mouse.x = mouse_x;
+	prev_mouse.y = mouse_y;
 }
 
 void
