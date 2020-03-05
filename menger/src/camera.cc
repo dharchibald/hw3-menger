@@ -13,7 +13,7 @@ glm::mat4 Camera::get_view_matrix() const
 {
 	// Define axes of new coordinate system
 	glm::vec3 z = glm::normalize(at_ - eye_);
-	glm::vec3 x = glm::normalize(glm::cross(z, up_));
+	glm::vec3 x = glm::normalize(glm::cross(up_, z));
 	glm::vec3 y = glm::normalize(glm::cross(x, z));
 
 	// Generate view matrix
