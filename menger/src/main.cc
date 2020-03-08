@@ -149,6 +149,7 @@ MousePosCallback(GLFWwindow* window, double mouse_x, double mouse_y)
 		if (g_mouse_was_pressed) {
 			g_camera.rotateX(angleX);
 			g_camera.rotateY(angleY);
+			// g_camera.translatePos(glm::vec3(angleX, angleY, 0.0f));
 		} else {
 			g_mouse_was_pressed = true;
 		}
