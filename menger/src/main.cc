@@ -158,7 +158,6 @@ MousePosCallback(GLFWwindow* window, double mouse_x, double mouse_y)
 		// FIXME: middle drag
 	} else if (g_current_button == GLFW_MOUSE_BUTTON_MIDDLE) {
 		// FIXME: right drag
-		printf("right click!!\n");
 		if (g_mouse_was_pressed) {
 			g_camera.translate(glm::vec3(angleX, angleY, 0.0f));
 		} else {

@@ -1,4 +1,4 @@
-#include <glm/gtx/transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include "camera.h"
 
 #include <stdio.h>
@@ -13,21 +13,17 @@ namespace {
 // FIXME: Calculate the view matrix
 glm::mat4 Camera::get_view_matrix() const
 {
-	// Apply transforms to points of interest
-	// glm::vec3 cam = glm::vec4(eye_, 1.0f);
-	// glm::vec3 tgt = glm::vec4(at_, 1.0f);
-
 	// Define axes of new coordinate system
-	glm::vec3 look_ = glm::normalize(at_ - eye_);
-	glm::vec3 right_ = glm::normalize(glm::cross(up_, look_));
-	glm::vec3 up_ = glm::normalize(glm::cross(right_, look_));
+	glm::vec3 z = glm::normalize(at_ - eye_);
+	glm::vec3 x = glm::normalize(glm::cross(up_, z));
+	glm::vec3 y = glm::normalize(glm::cross(x, z));
 
 	// Generate view matrix
 	return  glm::transpose(
-			glm::mat4(right_.x, right_.y, right_.z, glm::dot(-right_, eye_), 
-					  up_.x,    up_.y,    up_.z,    glm::dot(-up_, eye_),
-					  -look_.x, -look_.y, -look_.z, glm::dot(look_, eye_),
-					  0.0f,     0.0f,     0.0f,     1.0f));
+			glm::mat4(x.x,  x.y,  x.z,  glm::dot(-x, eye_), 
+					  y.x,  y.y,  y.z,  glm::dot(-y, eye_),
+					  -z.x, -z.y, -z.z, glm::dot(z, eye_),
+					  0.0f, 0.0f, 0.0f, 1.0f));
 }
 
 void Camera::translate (glm::vec3 pan) {
@@ -39,17 +35,29 @@ void Camera::translate (glm::vec3 pan) {
 	// 	}
 	// 	printf("\n");
 	// }
-	glm::vec3 translate = (pan.x * right_ + pan.y * up_ + pan.z * look_) * pan_speed;
+	// Don't need to update
+	glm::vec3 translate = (pan.x * right_ + pan.y * -up_ + pan.z * look_) * pan_speed;
 	eye_ += translate;
-	at_ += translate;
+	at_ += translate;    
 }
 
 void Camera::orbit (glm::vec2 dir) {
-	glm::mat4 rotateX = glm::rotate(rotation_speed * dir.x, up_);
-	glm::mat4 rotateY = glm::rotate(rotation_speed * dir.y, right_);
-	glm::mat4 orbit = glm::translate(at_) * rotateY * rotateX * glm::translate(-at_);
-	eye_ = orbit * glm::vec4(eye_, 1.0f);
-	at_ = orbit * glm::vec4(at_, 1.0f);
+	// Rotate around y-axis and update look/right vector in space
+	eye_ = glm::rotate(eye_, rotation_speed * dir.x, up_);
+	look_ = at_ - eye_;
+	right_ = glm::cross(look_, up_);
+
+	// Rotate around x-axis and update look/up vector in space
+	eye_ = glm::rotate(eye_, rotation_speed * dir.y, right_);
+	look_ = at_ - eye_;
+	up_ = glm::cross(right_, look_);
+
+	look_ = glm::normalize(look_);
+	right_ = glm::normalize(right_);
+	up_ = glm::normalize(up_);
+	// printf("Look: (%f, %f, %f)\n", look_.x, look_.y, look_.z);
+	// printf("Right: (%f, %f, %f)\n", right_.x, right_.y, right_.z);
+	// printf("Up: (%f, %f, %f)\n\n", up_.x, up_.y, up_.z);
 }
 
 void Camera::rotateX (float x) {

@@ -9,7 +9,7 @@
 ../lib/debuggl.h
 
 /home/doug/Storage/CS354/hw3-menger/menger/src/camera.cc
-glm/gtx/transform.hpp
+glm/gtx/rotate_vector.hpp
 -
 camera.h
 /home/doug/Storage/CS354/hw3-menger/menger/src/camera.h
