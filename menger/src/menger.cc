@@ -5,8 +5,8 @@ namespace {
 	const int kMaxLevel = 4;
 };
 
-const glm::vec3 min_bounds(-0.5, -0.5, -5.0);
-const glm::vec3 max_bounds( 0.5,  0.5,  -4.0);
+const glm::vec3 min_bounds(-0.5, -0.5, -0.5);
+const glm::vec3 max_bounds( 0.5,  0.5,  0.5);
 const float distance = -5.0f;
 
 Menger::Menger()
