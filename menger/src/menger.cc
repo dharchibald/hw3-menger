@@ -168,7 +168,6 @@ Menger::generate_geometry(std::vector<glm::vec4>& obj_vertices,
 		}
 		cube_pool = temp;
 	}
-	printf("Cube pool: %lu\n", cube_pool.size());
 
 	glm::vec3 length = (max_bounds - min_bounds) * (float)(1.0f / pow(3.0, nesting_level_));
 	for (int i = 0; i < cube_pool.size(); ++i) {

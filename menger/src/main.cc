@@ -38,6 +38,7 @@ uniform vec4 light_position;
 out vec4 light_direction;
 out vec4 normal;
 out vec4 v_normal;
+out vec4 world_position;
 void main()
 {
 // Transform vertex into clipping coordinates
@@ -47,7 +48,8 @@ void main()
         light_direction = view * (light_position - vertex_position);
 //  Transform normal to camera coordinates
         normal = view * vertex_normal;
-		v_normal = vertex_normal;
+	v_normal = vertex_normal;
+	world_position = vertex_position;
 }
 )zzz";
 
@@ -75,7 +77,17 @@ in vec4 world_position;
 out vec4 fragment_color;
 void main()
 {
-	fragment_color = vec4(0.0, 1.0, 0.0, 1.0);
+	vec4 color = vec4(0.0, 1.0, 0.0, 1.0);
+	//int simpleX = int(floor(world_position.x));
+	//int simpleZ = int(floor(world_position.z));
+	// if (simpleX % 2 == 0 && simpleZ % 2 == 0) {
+	// 	color = vec4(1.0, 1.0, 1.0, 1.0);
+	// } else {
+	// 	color = vec4(0.0, 0.0, 0.0, 1.0);
+	// }
+	float dot_nl = dot(normalize(light_direction), normalize(normal));
+	dot_nl = clamp(dot_nl, 0.0, 1.0);
+	fragment_color = clamp(dot_nl * color, 0.0, 1.0);
 }
 )zzz";
 
@@ -107,14 +119,14 @@ KeyCallback(GLFWwindow* window,
 		g_camera.zoom(-1.0f);
 	} else if (key == GLFW_KEY_A && action != GLFW_RELEASE) {
 		if (g_camera.isFPSmode())
-			g_camera.translate(glm::vec3(1.0f, 0.0f, 0.0f));
-		else
-			g_camera.orbit(glm::vec2(1.0f, 0.0f));
-	} else if (key == GLFW_KEY_D && action != GLFW_RELEASE) {
-		if (g_camera.isFPSmode())
 			g_camera.translate(glm::vec3(-1.0f, 0.0f, 0.0f));
 		else
 			g_camera.orbit(glm::vec2(-1.0f, 0.0f));
+	} else if (key == GLFW_KEY_D && action != GLFW_RELEASE) {
+		if (g_camera.isFPSmode())
+			g_camera.translate(glm::vec3(1.0f, 0.0f, 0.0f));
+		else
+			g_camera.orbit(glm::vec2(1.0f, 0.0f));
 	} else if (key == GLFW_KEY_LEFT && action != GLFW_RELEASE) {
 		// FIXME: Left Right Up and Down
 		g_camera.roll(-1.0f);
