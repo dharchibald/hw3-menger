@@ -1,4 +1,5 @@
 #include "menger.h"
+#include <stdio.h>
 
 namespace {
 	const int kMinLevel = 0;
@@ -125,7 +126,9 @@ Menger::generate_geometry(std::vector<glm::vec4>& obj_vertices,
 						  std::vector<glm::vec4>& vtx_normals,
                           std::vector<glm::uvec3>& obj_faces) const
 {
-	// create_menger(obj_vertices, vtx_normals, obj_faces, min_bounds, max_bounds);
+	obj_vertices.clear();
+	vtx_normals.clear();
+	obj_faces.clear();
 	// Do not actually construct cubes until end stage
 	// Recursively narrow down pool of cubes to work with
 	std::vector<glm::vec3> cube_pool;
@@ -165,19 +168,11 @@ Menger::generate_geometry(std::vector<glm::vec4>& obj_vertices,
 		}
 		cube_pool = temp;
 	}
+	printf("Cube pool: %lu\n", cube_pool.size());
 
 	glm::vec3 length = (max_bounds - min_bounds) * (float)(1.0f / pow(3.0, nesting_level_));
 	for (int i = 0; i < cube_pool.size(); ++i) {
 		create_menger(obj_vertices, vtx_normals, obj_faces, cube_pool[i], cube_pool[i] + length);
 	}
-	/*
-	obj_vertices.push_back(glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f));
-	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
-	obj_vertices.push_back(glm::vec4(0.5f, -0.5f, -0.5f, 1.0f));
-	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
-	obj_vertices.push_back(glm::vec4(0.0f, 0.5f, -0.5f, 1.0f));
-	vtx_normals.push_back(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
-	obj_faces.push_back(glm::uvec3(0, 1, 2));
-	*/
 }
 

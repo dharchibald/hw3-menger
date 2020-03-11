@@ -258,7 +258,7 @@ int main(int argc, char* argv[])
 	/* END USER CONTENT */
         
     // FIXME: Create the geometry from a Menger object (in menger.cc).
-	g_menger->set_nesting_level(1);
+	g_menger->set_nesting_level(4);
 	g_menger->generate_geometry(obj_vertices, vtx_normals, obj_faces);
 	// USER CONTENT
 	generate_floor(floor_vertices, floor_normals, floor_faces);
@@ -468,7 +468,7 @@ int main(int argc, char* argv[])
 		CHECK_GL_ERROR(glBindVertexArray(g_array_objects[kGeometryVao]));
 
 		if (g_menger && g_menger->is_dirty()) {
-		  g_menger->generate_geometry(obj_vertices, vtx_normals, obj_faces);
+			g_menger->generate_geometry(obj_vertices, vtx_normals, obj_faces);
 			g_menger->set_clean();
 		}
 
