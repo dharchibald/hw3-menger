@@ -99,16 +99,25 @@ KeyCallback(GLFWwindow* window,
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	else if (key == GLFW_KEY_W && action != GLFW_RELEASE) {
 		// FIXME: WASD
+		g_camera.zoom(1.0f);
 	} else if (key == GLFW_KEY_S && action != GLFW_RELEASE) {
+		g_camera.zoom(-1.0f);
 	} else if (key == GLFW_KEY_A && action != GLFW_RELEASE) {
+		g_camera.translate(glm::vec3(1.0f, 0.0f, 0.0f));
 	} else if (key == GLFW_KEY_D && action != GLFW_RELEASE) {
+		g_camera.translate(glm::vec3(-1.0f, 0.0f, 0.0f));
 	} else if (key == GLFW_KEY_LEFT && action != GLFW_RELEASE) {
 		// FIXME: Left Right Up and Down
+		g_camera.roll(-1.0f);
 	} else if (key == GLFW_KEY_RIGHT && action != GLFW_RELEASE) {
+		g_camera.roll(1.0f);
 	} else if (key == GLFW_KEY_DOWN && action != GLFW_RELEASE) {
+		g_camera.translate(glm::vec3(0.0f, -1.0f, 0.0f));
 	} else if (key == GLFW_KEY_UP && action != GLFW_RELEASE) {
+		g_camera.translate(glm::vec3(0.0f, 1.0f, 0.0f));
 	} else if (key == GLFW_KEY_C && action != GLFW_RELEASE) {
 		// FIXME: FPS mode on/off
+		g_camera.toggleFPS();
 	}
 	if (!g_menger)
 		return ; // 0-4 only available in Menger mode.
@@ -146,7 +155,12 @@ MousePosCallback(GLFWwindow* window, double mouse_x, double mouse_y)
 	if (g_current_button == GLFW_MOUSE_BUTTON_LEFT) {
 		// FIXME: left drag
 		if (g_mouse_was_pressed) {
-			g_camera.orbit(glm::vec2(angleX, angleY));
+
+			if (!g_camera.isFPSmode())
+				g_camera.orbit(glm::vec2(angleX, angleY));
+			else
+				g_camera.rotate(glm::vec2(angleX, angleY));
+			
 		} else {
 			g_mouse_was_pressed = true;
 		}

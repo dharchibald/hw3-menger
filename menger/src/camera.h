@@ -7,13 +7,16 @@ class Camera {
 public:
 	glm::mat4 get_view_matrix() const;
 	// FIXME: add functions to manipulate camera objects.
-	void orbit (glm::vec2 dir);
 	void translate (glm::vec3 pan);
+	void orbit (glm::vec2 dir);
+	void rotate (glm::vec2 dir);
+	void roll (float degree);
 	void zoom (float dist);
-	void rotateX (float x);
-	void rotateY (float y);
-	void rotateZ (float z);
+	bool isFPSmode () const;
+	void toggleFPS ();
+
 private:
+	bool fps_mode = false;
 	float camera_distance_ = 3.0;
 	glm::vec3 look_ = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 up_ = glm::vec3(0.0f, 1.0, 0.0f);
