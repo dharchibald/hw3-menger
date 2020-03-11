@@ -218,18 +218,22 @@ generate_floor (std::vector<glm::vec4>& floor_vertices,
 				std::vector<glm::vec4>& floor_normals,
 				std::vector<glm::uvec3>& floor_faces) 
 {
-	/*
-	floor_vertices.push_back(glm::vec4(-10, -1, -10, 1));
-	floor_vertices.push_back(glm::vec4(-10, -1,  10, 1));
-	floor_vertices.push_back(glm::vec4( 10, -1,  10, 1));
-	floor_vertices.push_back(glm::vec4( 10, -1, -10, 1));
+	floor_vertices.push_back(glm::vec4( 0.0f, -2.0f,  0.0f, 1.0f));
+	floor_vertices.push_back(glm::vec4( 1.0f, 0.0f,  0.0f, 0.0f));
+	floor_vertices.push_back(glm::vec4( 0.0f, 0.0f,  1.0f, 0.0f));
+	floor_vertices.push_back(glm::vec4(-1.0f, 0.0f,  0.0f, 0.0f));
+	floor_vertices.push_back(glm::vec4( 0.0f, 0.0f, -1.0f, 0.0f));
 
-	floor_normals.push_back(glm::vec4(0, 1, 0, 0));
-	floor_normals.push_back(glm::vec4(0, 1, 0, 0));
+	floor_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	floor_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	floor_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	floor_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	floor_normals.push_back(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
 
 	floor_faces.push_back(glm::uvec3(0, 1, 2));
-	floor_faces.push_back(glm::uvec3(1, 2, 3));
-	*/
+	floor_faces.push_back(glm::uvec3(0, 2, 3));
+	floor_faces.push_back(glm::uvec3(0, 3, 4));
+	floor_faces.push_back(glm::uvec3(0, 4, 1));
 }
 
 int main(int argc, char* argv[])

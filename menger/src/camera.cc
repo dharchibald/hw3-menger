@@ -15,9 +15,12 @@ glm::mat4 Camera::get_view_matrix() const
 {
 	// Define axes of new coordinate system
 	glm::vec3 z = glm::normalize(at_ - eye_);
-	glm::vec3 x = glm::normalize(glm::cross(up_, z));
+	glm::vec3 x = glm::normalize(glm::cross(z, up_));
 	glm::vec3 y = glm::normalize(glm::cross(x, z));
 
+	printf("X: (%f, %f, %f)\n", x.x, x.y, x.z);
+	printf("Y: (%f, %f, %f)\n", y.x, y.y, y.z);
+	printf("Z: (%f, %f, %f)\n", z.x, z.y, z.z);
 	// Generate view matrix
 	return  glm::transpose(
 			glm::mat4(x.x,  x.y,  x.z,  glm::dot(-x, eye_), 
