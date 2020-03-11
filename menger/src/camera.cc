@@ -27,15 +27,7 @@ glm::mat4 Camera::get_view_matrix() const
 }
 
 void Camera::translate (glm::vec3 pan) {
-	// translate *= glm::translate((pan.x * right_ + pan.y * up_ + pan.z * look_) * pan_speed);
-	// printf("Translate:\n");
-	// for (int i = 0; i < 4; ++i) {
-	// 	for (int j = 0; j < 4; ++j) {
-	// 		printf("%f ", translate[i][j]);
-	// 	}
-	// 	printf("\n");
-	// }
-	// Don't need to update
+	// Don't need to update basis vectors
 	glm::vec3 translate = (pan.x * right_ + pan.y * -up_ + pan.z * look_) * pan_speed;
 	eye_ += translate;
 	at_ += translate;    
@@ -44,12 +36,12 @@ void Camera::translate (glm::vec3 pan) {
 void Camera::orbit (glm::vec2 dir) {
 	// Rotate around y-axis and update look/right vector in space
 	eye_ = glm::rotate(eye_, rotation_speed * dir.x, up_);
-	look_ = at_ - eye_;
-	right_ = glm::cross(look_, up_);
+	look_ = glm::normalize(at_ - eye_);
+	right_ = glm::normalize(glm::cross(look_, up_));
 
 	// Rotate around x-axis and update look/up vector in space
 	eye_ = glm::rotate(eye_, rotation_speed * dir.y, right_);
-	look_ = at_ - eye_;
+	look_ = glm::normalize(at_ - eye_);
 	up_ = glm::cross(right_, look_);
 
 	look_ = glm::normalize(look_);
@@ -58,6 +50,10 @@ void Camera::orbit (glm::vec2 dir) {
 	// printf("Look: (%f, %f, %f)\n", look_.x, look_.y, look_.z);
 	// printf("Right: (%f, %f, %f)\n", right_.x, right_.y, right_.z);
 	// printf("Up: (%f, %f, %f)\n\n", up_.x, up_.y, up_.z);
+}
+
+void Camera::zoom (float dist) {
+	eye_ += dist * look_ * zoom_speed;
 }
 
 void Camera::rotateX (float x) {

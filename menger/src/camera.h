@@ -9,6 +9,7 @@ public:
 	// FIXME: add functions to manipulate camera objects.
 	void orbit (glm::vec2 dir);
 	void translate (glm::vec3 pan);
+	void zoom (float dist);
 	void rotateX (float x);
 	void rotateY (float y);
 	void rotateZ (float z);

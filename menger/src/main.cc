@@ -145,7 +145,6 @@ MousePosCallback(GLFWwindow* window, double mouse_x, double mouse_y)
 
 	if (g_current_button == GLFW_MOUSE_BUTTON_LEFT) {
 		// FIXME: left drag
-		// printf("Mouse: (%f, %f)\n", mouse_x, mouse_y);
 		if (g_mouse_was_pressed) {
 			g_camera.orbit(glm::vec2(angleX, angleY));
 		} else {
@@ -156,6 +155,14 @@ MousePosCallback(GLFWwindow* window, double mouse_x, double mouse_y)
 		
 	} else if (g_current_button == GLFW_MOUSE_BUTTON_RIGHT) {
 		// FIXME: middle drag
+		if (g_mouse_was_pressed) {
+			g_camera.zoom(angleY);
+		} else {
+			g_mouse_was_pressed = true;
+		}
+		prev_mouse.x = mouse_x;
+		prev_mouse.y = mouse_y;
+
 	} else if (g_current_button == GLFW_MOUSE_BUTTON_MIDDLE) {
 		// FIXME: right drag
 		if (g_mouse_was_pressed) {
@@ -165,6 +172,7 @@ MousePosCallback(GLFWwindow* window, double mouse_x, double mouse_y)
 		}
 		prev_mouse.x = mouse_x;
 		prev_mouse.y = mouse_y;
+
 	}
 	
 }
