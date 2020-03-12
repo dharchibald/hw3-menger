@@ -78,13 +78,13 @@ out vec4 fragment_color;
 void main()
 {
 	vec4 color = vec4(0.0, 1.0, 0.0, 1.0);
-	//int simpleX = int(floor(world_position.x));
-	//int simpleZ = int(floor(world_position.z));
-	// if (simpleX % 2 == 0 && simpleZ % 2 == 0) {
-	// 	color = vec4(1.0, 1.0, 1.0, 1.0);
-	// } else {
-	// 	color = vec4(0.0, 0.0, 0.0, 1.0);
-	// }
+	int simpleX = int(floor(world_position.x));
+	int simpleZ = int(floor(world_position.z));
+	if (simpleX % 2 == 0  && simpleZ % 2 == 1 || simpleX % 2 == 1 && simpleZ % 2 == 0) {
+		color = vec4(1.0, 1.0, 1.0, 1.0);
+	} else {
+		color = vec4(0.0, 0.0, 0.0, 1.0);
+	}
 	float dot_nl = dot(normalize(light_direction), normalize(normal));
 	dot_nl = clamp(dot_nl, 0.0, 1.0);
 	fragment_color = clamp(dot_nl * color, 0.0, 1.0);
@@ -134,14 +134,14 @@ KeyCallback(GLFWwindow* window,
 		g_camera.roll(1.0f);
 	} else if (key == GLFW_KEY_DOWN && action != GLFW_RELEASE) {
 		if (g_camera.isFPSmode())
-			g_camera.translate(glm::vec3(0.0f, -1.0f, 0.0f));
-		else
-			g_camera.orbit(glm::vec2(0.0f, -1.0f));
-	} else if (key == GLFW_KEY_UP && action != GLFW_RELEASE) {
-		if (g_camera.isFPSmode())
 			g_camera.translate(glm::vec3(0.0f, 1.0f, 0.0f));
 		else
 			g_camera.orbit(glm::vec2(0.0f, 1.0f));
+	} else if (key == GLFW_KEY_UP && action != GLFW_RELEASE) {
+		if (g_camera.isFPSmode())
+			g_camera.translate(glm::vec3(0.0f, -1.0f, 0.0f));
+		else
+			g_camera.orbit(glm::vec2(0.0f, -1.0f));
 	} else if (key == GLFW_KEY_C && action != GLFW_RELEASE) {
 		// FIXME: FPS mode on/off
 		g_camera.toggleFPS();
